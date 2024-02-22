@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>항공편 예약</title>
+  <link rel="stylesheet" href="CSS/reservation.css">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head>
+<body>
+    <div class="container">
+        <h1>항공편 예약</h1>
+        <div id="selectedFlightInfo" class="flight-info">
+          <!-- 여기에 선택된 항공편 정보가 표시됩니다 -->
+        </div>
+        <form id="reservationForm">
+          <label for="passengers">인원수</label>
+          <input type="number" id="passengers" name="passengers" class="input-number" required min="1" max="9">
+          <button type="submit" class="button">예약 완료</button>
+        </form>
+        
+        <!-- 예약 완료 메시지를 표시할 div 추가 -->
+        <div id="reservationMessage" class="reservation-success-message" style="display: none;"></div>
+      </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 세션 스토리지에서 항공편 정보 로드
+        const selectedFlight = JSON.parse(sessionStorage.getItem('selectedFlight'));
+        console.log('Loaded from sessionStorage:', selectedFlight);
+        if (selectedFlight) {
+          displaySelectedFlightInfo(selectedFlight);
+        } else {
+          document.getElementById('selectedFlightInfo').innerHTML = '<p>항공편 정보를 불러오는 데 실패했습니다.</p>';
+        }
+    });
+  
+    function displaySelectedFlightInfo(flight) {
+      const flightInfoElement = document.getElementById('selectedFlightInfo');
+      flightInfoElement.innerHTML = `
+        <h2>선택된 항공편</h2>
+        <p>항공사: ${flight.airline}</p>
+        <p>출발지: ${flight.departure}</p>
+        <p>도착지: ${flight.destination}</p>
+        <p>가격: ${flight.price}만원</p>
+        <p>예약 가능 좌석: ${flight.seatsAvailable}석</p>
+      `;
+    }
+  
+    function handleReservationSubmit(e) {
+        e.preventDefault();
+        const passengers = parseInt(document.getElementById('passengers').value, 10); // 숫자로 변환
+      
+        // 세션 스토리지에서 항공편 ID를 가져옴
+        const Number = parseInt(JSON.parse(sessionStorage.getItem('selectedFlight')).Number, 10); // 숫자로 변환
+        const flight = JSON.parse(sessionStorage.getItem('selectedFlight'));
+
+        const reservationData = {
+          Number: Number,
+          passengers: passengers,
+          airline: flight.airline, // 항공사
+          departure: flight.departure, // 출발지
+          departureDate: flight.departureDate, // 출발 날짜 (필요한 경우)
+          destination: flight.destination, // 도착지
+          returnDate: flight.returnDate, // 반환 날짜 (필요한 경우)
+        };
+      
+        // API Gateway 엔드포인트를 가정한 URL
+        const apiEndpoint = 'https://vhdwppucl9.execute-api.ap-northeast-2.amazonaws.com/Get_flightlist/booking';
+      
+        fetch(apiEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('authToken') // 인증 구현에 따라 수정 필요
+          },
+          body: JSON.stringify(reservationData)
+        })
+          .then(response => {
+            if (!response.ok) {
+              return response.json().then(err => { throw new Error(err.message) });
+            }
+            return response.json();
+          })
+          .then(data => {
+            // 예약 완료 메시지를 표시
+            const reservationMessageElement = document.getElementById('reservationMessage');
+            reservationMessageElement.innerHTML = '<p>예약이 완료되었습니다!</p>';
+            reservationMessageElement.style.display = 'block'; // 박스를 표시
+            
+            // 예약 완료 후, 메인 페이지로 리디렉션
+            setTimeout(function() {
+              window.location.href = 'main.html'; // 메인 페이지 URL로 수정 필요
+            }, 2000); // 2초 후에 리디렉션
+          })
+          .catch(error => {
+            console.error('Reservation error:', error);
+            alert('예약에 실패했습니다.');
+          });
+      }
+      
+      // 예약 폼 이벤트 리스너 추가
+      document.getElementById('reservationForm').addEventListener('submit', handleReservationSubmit);
+  </script>
+  </body>  
+</html>

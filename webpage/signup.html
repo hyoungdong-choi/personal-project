@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>회원가입</title>
+  <link rel="stylesheet" href="CSS/signup.css">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head>
+<body>
+  <div class="signup-container">
+    <h2>회원가입</h2>
+    <form id="signupForm">
+      <div class="form-group">
+        <label for="username">사용자 이름</label>
+        <input type="text" id="username" name="username" required placeholder="예: user1234">
+      </div>
+      <div class="form-group">
+        <label for="email">이메일</label>
+        <input type="email" id="email" name="email" required pattern="[^@\s]+@[^@\s]+\.[^@\s]+" placeholder="예: user@example.com">
+      </div>
+      <div class="form-group">
+        <label for="address">집주소</label>
+        <input type="text" id="address" name="address" required placeholder="예: 서울시 강남구 테헤란로 123">
+      </div>
+      <div class="form-group">
+        <label for="phoneNumber">핸드폰 번호</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber" required pattern="\d{10,11}" placeholder="예: 01012345678">
+      </div>
+      <div class="form-group">
+        <label for="password">비밀번호</label>
+        <input type="password" id="password" name="password" required minlength="8" placeholder="비밀번호 (8자 이상)">
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword">비밀번호 확인</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="비밀번호 확인">
+      </div>
+      <button type="submit">가입하기</button>
+      <p id="formFeedback"></p>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const signupForm = document.getElementById("signupForm");
+      const formFeedback = document.getElementById("formFeedback");
+    
+      signupForm.addEventListener("submit", function(event) {
+        event.preventDefault(); // 기본 동작 방지
+    
+        const username = document.getElementById("username").value;
+        const email = document.getElementById("email").value;
+        const address = document.getElementById("address").value;
+        const phoneNumber = document.getElementById("phoneNumber").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+    
+        // 클라이언트 측 유효성 검사
+        if (password !== confirmPassword) {
+          formFeedback.textContent = "비밀번호가 일치하지 않습니다. 다시 확인해주세요.";
+          formFeedback.style.color = "red";
+          return;
+        }
+    
+        // JSON 데이터 생성
+        const userData = {
+          username: username,
+          email: email,
+          phoneNumber: phoneNumber,
+          password: password,
+          address: address
+        };
+    
+     // 가입 처리 중 피드백 표시
+     formFeedback.textContent = "회원가입 처리 중...";
+     formFeedback.style.color = "blue";
+ 
+     const apiEndpoint = "https://vhdwppucl9.execute-api.ap-northeast-2.amazonaws.com/Get_flightlist/users";
+ 
+     fetch(apiEndpoint, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(userData)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP status ${response.status}`);
+      }
+      return response.json(); // 첫 번째 파싱: HTTP 응답을 JSON 객체로 변환
+    })
+    .then(lambdaResponse => {
+      const actualData = JSON.parse(lambdaResponse.body); // 두 번째 파싱: lambda 응답의 body 문자열을 JSON 객체로 변환
+      if (actualData.message === 'Registration successful') {
+        formFeedback.textContent = "회원가입 성공!";
+        formFeedback.style.color = "green";
+        setTimeout(() => window.location.href = "main.html", 2000); // 성공 후 2초 뒤에 페이지 이동
+      } else {
+        throw new Error(actualData.message || "회원가입에 실패했습니다.");
+      }
+    })
+    .catch(error => {
+      formFeedback.textContent = error.message; // 오류 메시지 표시
+      formFeedback.style.color = "red";
+    });
+    
+    
+    
+      });
+    });
+    </script>
+    
+  
+</body>
+</html>

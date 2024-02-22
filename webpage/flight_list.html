@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>항공편 리스트</title>
+  <link rel="stylesheet" href="CSS/flight_list.css">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head>
+<body>
+  <header class="list-header">
+    <div class="logo" id="logoLink">🌞JaeWonFlight</div>
+    <h2>항공편 리스트</h2>
+    <nav class="main-nav">
+      <ul id="authLinks">
+        <!-- 로그인 상태에 따라 여기에 버튼이 추가됩니다 -->
+      </ul>
+    </nav>
+  </header>
+
+  <div class="flight-list" id="flightList">
+    <!-- 동적 콘텐츠가 여기에 추가될 예정 -->
+  </div>
+
+<script>
+    function goToMainPage() {
+        window.location.href = "main.html";
+    }
+      
+    document.querySelector('.logo').onclick = function() {
+        goToMainPage();
+    };
+
+// 로그인 상태를 확인하고 인증 링크를 업데이트하는 함수
+document.addEventListener('DOMContentLoaded', function() {
+  checkLoginStatus();
+  loadFlights();
+  updateSeatsPeriodically();
+});
+
+function checkLoginStatus() {
+  const authLinks = document.getElementById('authLinks');
+  
+  // 로그인 상태 확인
+  if (localStorage.getItem('authToken')) {
+    // 로그아웃 버튼을 안전하게 동적으로 추가하기 위해, 
+    // createElement와 appendChild를 사용할 것을 권장합니다.
+    var logoutLi = document.createElement('li');
+    var logoutLink = document.createElement('a');
+    logoutLink.href = "#";
+    logoutLink.id = "logoutButton";
+    logoutLink.textContent = "로그아웃";
+    logoutLink.addEventListener('click', function() {
+      localStorage.removeItem('authToken');
+      window.location.reload();
+    });
+    logoutLi.appendChild(logoutLink);
+    authLinks.appendChild(logoutLi);
+
+ // 나의 예약 정보 버튼 추가
+    var reservationLi = document.createElement('li');
+    var reservationLink = document.createElement('a');
+    reservationLink.href = "reservation_info.html"; // 예약 정보 페이지로 가는 경로 설정
+    reservationLink.id = "reservationInfo";
+    reservationLink.textContent = "나의 예약 정보";
+    reservationLi.appendChild(reservationLink);
+    authLinks.appendChild(reservationLi);
+  } else {
+    // 로그인 및 회원가입 버튼 생성
+    authLinks.innerHTML = '<li><a id="loginButton" href="#">로그인</a></li><li><a href="signup.html">회원가입</a></li>';
+
+    // 로그인 페이지로 이동하는 버튼에 이벤트 리스너를 추가합니다.
+document.getElementById('loginButton').addEventListener('click', function() {
+  // 현재 페이지의 URL을 sessionStorage에 'returnUrl'이라는 키로 저장합니다.
+  sessionStorage.setItem('returnUrl', window.location.href);
+  window.location.href = 'login.html'; // 로그인 페이지로 이동합니다.
+});
+  }
+}
+
+
+
+  // 페이지 로드 시 항공편 목록 로드
+  document.addEventListener('DOMContentLoaded', function() {
+    loadFlights();
+    updateSeatsPeriodically();
+  });
+
+  function loadFlights() {
+    const flightsData = sessionStorage.getItem('searchResults');
+    if (flightsData) {
+      try {
+        // 첫 번째 JSON.parse는 외부 JSON을 파싱
+        const response = JSON.parse(flightsData);
+        // 두 번째 JSON.parse는 내부 body 문자열을 파싱
+        const flights = JSON.parse(response.body);
+        if (Array.isArray(flights)) {
+          displayFlights(flights);
+        } else {
+          throw new Error('Body is not an array');
+        }
+      } catch (error) {
+        console.error('Error parsing flights data:', error);
+        document.getElementById('flightList').innerHTML = '<p>검색 결과 데이터 형식이 올바르지 않습니다.</p>';
+      }
+    } else {
+      document.getElementById('flightList').innerHTML = '<p>검색 결과가 없습니다.</p>';
+    }
+  }
+  
+
+  function displayFlights(flights) {
+    const flightListElement = document.getElementById('flightList');
+    flightListElement.innerHTML = '';
+
+    flights.forEach(flight => {
+      const flightElement = document.createElement('div');
+      flightElement.classList.add('flight');
+      flightElement.innerHTML = `
+        <h3>항공사: ${flight.airline}</h3>
+        <p>출발지: ${flight.departure}</p>
+        <p>도착지: ${flight.destination}</p>
+        <p>가격: ${flight.price}만원</p>
+        <p>예약 가능 좌석: ${flight.seatsAvailable}석</p>
+        <button class="reserve-button" data-flight-id="${flight.Number}">예약하기</button>
+      `;
+      flightListElement.appendChild(flightElement);
+
+       // 예약하기 버튼에 이벤트 리스너를 추가하여 클릭 시 예약 페이지로 이동합니다.
+       const reserveButton = flightElement.querySelector('.reserve-button');
+       reserveButton.addEventListener('click', function() {
+         goToReservationPage(flight);
+       });
+    });
+  }
+
+  function goToReservationPage(flight) {
+    sessionStorage.setItem('selectedFlight', JSON.stringify(flight));
+    console.log('Saving to sessionStorage:', flight);
+    window.location.href = 'reservation.html';
+  }
+
+  function updateSeatsPeriodically() {
+    const apiEndpoint = 'https://vhdwppucl9.execute-api.ap-northeast-2.amazonaws.com/Get_flightlist/flightlist';
+    setInterval(() => {
+      fetch(apiEndpoint)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          try {
+            const flights = JSON.parse(data.body);
+            if (Array.isArray(flights)) {
+              displayFlights(flights);
+            } else {
+              console.error('Received data is not an array');
+            }
+          } catch (error) {
+            console.error('Error parsing flights data:', error);
+          }
+        })
+        .catch(error => {
+          console.error('Error updating flight seats:', error);
+        });
+    }, 20000); // 30초마다 갱신
+  }
+
+  </script>
+</body>
+</html>

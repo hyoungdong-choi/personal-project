@@ -1,0 +1,333 @@
+/* Resetting default browser styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Base styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+}
+
+/* Header styles */
+.main-header {
+  background-color: #003580;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+/* Navigation styles */
+.main-nav ul {
+  display: flex;
+  gap: 1rem;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.main-nav a {
+  color: white;
+  text-decoration: none;
+}
+
+/* Dropdown menu */
+.main-navigation {
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: 50px;
+  background-color: white;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  z-index: 1000;
+}
+
+.main-navigation.show {
+  display: block;
+}
+
+.main-navigation ul {
+  list-style: none;
+}
+
+.main-navigation li a {
+  display: block;
+  padding: 0.625rem;
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.main-navigation li a:hover {
+  background-color: #f1f1f1;
+}
+
+/* Search panel styles */
+.search-panel {
+  background-color: #003580;
+  color: white;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tab-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.tab {
+  background-color: #002855;
+  border: none;
+  padding: 0.625rem 0;
+  border-radius: 0.25rem;
+  color: white;
+  cursor: pointer;
+  outline: none;
+  font-size: 1rem;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.tab:hover {
+  background-color: #004299;
+}
+
+/* Active tab */
+.tab.active {
+  background-color: #0051cc;
+}
+
+.field-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.25rem;
+}
+
+.field-group label {
+  margin-bottom: 0.3125rem;
+}
+
+.field-group input[type="text"],
+.field-group input[type="date"],
+.field-group select {
+  padding: 0.625rem;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  background-color: white;
+  color: #333;
+}
+
+/* Search button */
+.search-button {
+  background-color: #0066ff;
+  color: white;
+  border: none;
+  padding: 0.625rem 0;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  outline: none;
+  width: 100%;
+}
+
+.search-button:hover {
+  background-color: #0051cc;
+}
+
+/* Focusing on inputs */
+input[type="text"]:focus,
+input[type="date"]:focus,
+select:focus {
+  outline: none;
+  border: 2px solid #0051cc;
+}
+
+/* Adjusting width for search fields and button */
+.search-fields,
+.search-button {
+  width: 100%;
+}
+
+.dropdown-content {
+  position: absolute;
+  display: none;
+  position: absolute;
+  background-color: #f6f6f6;
+  width: 100%; /* min-width 대신 width 사용 */
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem; /* 입력 필드와 일치하는 둥근 모서리 */
+  top: 100%;
+  left: 0;
+}
+
+.dropdown-toggle {
+  padding: 0.625rem; /* 입력 필드와 일치하는 패딩 */
+  border: 1px solid #ddd; /* 나머지 입력 필드와 동일한 테두리 스타일 적용 */
+  border-radius: 0.25rem; /* 둥근 모서리 */
+  background-color: white;
+  color: #333;
+  font-size: 1rem;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 0.625rem; /* 기존에 설정된 12px 16px 대신에 다른 입력 필드와 일치하게 수정 */
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.show {display: block;}
+
+/* passenger */
+.dropdown-button {
+  width: 100%; /* 전체 너비 사용 */
+  padding: 10px 15px; /* 패딩 조정 */
+  background-color: #FFFFFF; /* 배경색을 흰색으로 변경 */
+  color: #333; /* 글자색을 어두운 색으로 변경 */
+  text-align: left; /* 텍스트 왼쪽 정렬 */
+  border: 1px solid #ddd; /* 경계선 설정 */
+  border-radius: 4px; /* 경계선 둥글게 */
+  font-size: 1rem; /* 폰트 사이즈 설정 */
+  margin-bottom: 0; /* 아래쪽 마진 제거 */
+  cursor: pointer; /* 클릭 가능한 요소임을 나타내는 커서 스타일 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
+}
+
+.passenger-dropdown {
+  display: none; /* 기본 상태에서는 보이지 않게 설정 */
+  position: absolute; /* 절대 위치 */
+  background-color: #FFFFFF; /* 배경색을 흰색으로 변경 */
+  border: 1px solid #ddd; /* 경계선 설정 */
+  border-radius: 4px; /* 경계선 둥글게 */
+  padding: 15px; /* 내부 패딩 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
+  width: calc(100% - 30px); /* 버튼과 같은 너비로 설정 */
+  box-sizing: border-box; /* 박스 사이징 */
+  top: 100%; /* 버튼 바로 아래에 위치하도록 설정 */
+  left: 0; /* 왼쪽 정렬 */
+  margin-top: 10px; /* 버튼과의 간격 */
+  z-index: 10; /* 다른 요소들 위에 표시되도록 z-index 설정 */
+}
+
+.passenger-count {
+  display: flex; /* Flexbox 레이아웃 사용 */
+  align-items: center; /* 세로 중앙 정렬 */
+  justify-content: flex-start; /* 시작 지점에서 정렬 */
+  margin-bottom: 10px; /* 아래쪽 여백 */
+}
+
+.passenger-minus,
+.passenger-plus {
+  padding: 5px 10px;
+  background-color: #ddd;
+  border: none;
+  margin: 0 5px;
+}
+
+.apply-button {
+  background-color: #003580; /* 적용 버튼 배경색 */
+  color: white; /* 적용 버튼 글자색 */
+  padding: 10px; /* 패딩 */
+  border: none; /* 테두리 없음 */
+  border-radius: 4px; /* 둥근 모서리 */
+  margin-top: 10px; /* 버튼 위쪽 여백 */
+  width: 100%; /* 전체 너비 사용 */
+  cursor: pointer; /* 클릭 가능한 항목을 나타내는 커서 */
+}
+
+.passenger-count button {
+  border: 1px solid #ccc; /* 버튼 테두리 */
+  background-color: #f7f7f7; /* 버튼 배경색 */
+  color: #333; /* 버튼 글자색 */
+  padding: 5px 10px; /* 패딩 */
+  margin: 0 5px; /* 좌우 마진 */
+  cursor: pointer; /* 클릭 가능한 항목을 나타내는 커서 */
+}
+
+.passenger-count span {
+  display: inline-block; /* 라벨을 인라인 블록으로 만들어서 버튼 옆에 표시 */
+  min-width: 50px; /* 충분한 너비를 제공하여 텍스트가 잘리지 않도록 함 */
+  margin-right: 10px; /* 버튼과의 간격 */
+  flex: 1;
+  color: #333; /* 레이블 텍스트 색상 - 배경에 따라서 조정 필요 */
+  font-size: 1rem; /* 레이블 텍스트 크기 */
+  line-height: 2rem; /* 높이를 버튼과 일치시키기 위해 조정 */
+}
+
+/* 카운터 숫자를 위한 스타일 */
+.passenger-count #adult-count,
+.passenger-count #children-count {
+  padding: 0 10px; /* 좌우 패딩 */
+  color: #333; /* 숫자 색상 - 배경에 따라서 조정 필요 */
+}
+
+.passenger-count span.count-number {
+  min-width: 30px; /* 숫자가 들어갈 공간 충분히 확보 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+
+.content-container {
+  display: flex; /* Enables flexbox layout */
+  align-items: flex-start; /* Aligns items to the start of the container */
+  justify-content: center; /* Centers items horizontally */
+  height: 100vh; /* Sets the container height to fill the viewport */
+  padding: 1rem;
+}
+
+.image-container {
+  flex: 1; /* Assigns flex-grow of 1, allowing it to grow */
+  background-image: url('path_to_your_image.jpg'); /* Replace with your image path */
+  background-size: cover;
+  background-position: center;
+  height: 100%; /* Sets the height to fill the container */
+}
+
+.search-panel-container {
+  flex: 1; /* Allows the search panel container to grow */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-panel {
+  background-color: #003580;
+  color: white;
+  /* Remove max-width and margin auto to allow flexbox to control the width */
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 100%; /* Ensures the search panel fills the flex item */
+  max-width: 800px; /* Optional: if you want to limit the width */
+}
+
+.image-container {
+  background-image: url('flight1.jpg'); /* Replace with the actual path to your image */
+  background-size: cover; /* Cover ensures that the image covers the entire area */
+  background-position: center; /* Centers the image within the container */
+  flex: 1; /* Takes up 1/2 of the flex container space if there are two flex items */
+  height: 70vh; /* Example height, adjust as necessary */
+}

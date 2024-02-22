@@ -1,0 +1,64 @@
+.body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+    }
+.container {
+  max-width: 800px; /* 메인 페이지 컨테이너 스타일에 맞게 조정 */
+  margin: 2rem auto; /* 상단과 하단의 여백을 조정 */
+  padding: 1.25rem; /* 패딩을 조정 */
+  background-color: white; /* 배경색을 흰색으로 설정 */
+  border-radius: 0.5rem; /* 모서리를 둥글게 설정 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 그림자 효과를 추가 */
+      }
+.flight-info {
+  margin-bottom: 20px;
+  }
+
+.label {
+  display: block;
+  margin-bottom: 5px;
+    }
+    
+.input-number {
+  width: 100%; /* 너비를 100%로 설정 */
+  padding: 0.625rem; /* 패딩을 조정 */
+  margin-bottom: 1rem; /* 하단 여백을 설정 */
+  border: 1px solid #ddd; /* 테두리 색상을 설정 */
+  border-radius: 0.25rem; /* 테두리 둥글게 설정 */
+  background-color: #f8f8f8; /* 배경색을 설정 */
+  }
+
+.button {
+  width: 100%; /* 너비를 100%로 설정 */
+  padding: 0.625rem; /* 패딩을 조정 */
+  background-color: #0056b3; /* 배경색을 설정 */
+  color: white; /* 글자색을 흰색으로 설정 */
+  border: none; /* 테두리를 제거 */
+  border-radius: 0.25rem; /* 테두리 둥글게 설정 */
+  cursor: pointer; /* 마우스 오버시 포인터 변경 */
+  margin-top: 0.5rem; /* 상단 여백을 설정 */
+  }
+    
+.button:hover {
+  background-color: #004494;
+    }
+
+    .reservation-success-message {
+      position: fixed; /* 화면 상단에 고정 */
+      top: 50%; /* 수직 가운데 정렬을 위해 화면 상단에서 50% 위치로 이동 */
+      left: 50%; /* 수평 가운데 정렬을 위해 화면 왼쪽에서 50% 위치로 이동 */
+      transform: translate(-50%, -50%); /* 수평 및 수직으로 중앙 정렬 */
+      background-color: #4CAF50; /* 배경색을 초록색으로 설정 */
+      color: white; /* 글자색을 흰색으로 설정 */
+      text-align: center; /* 가운데 정렬 */
+      padding: 1rem; /* 패딩을 조정 */
+      border-radius: 0.25rem; /* 테두리 둥글게 설정 */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 그림자 효과를 추가 */
+    }
+    
+    .reservation-success-message p {
+      margin: 0; /* 문단의 상하 여백을 제거 */
+      font-size: 1.2rem; /* 글자 크기를 조정 */
+    }

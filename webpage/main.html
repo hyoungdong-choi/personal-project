@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JaeWonFlight</title>
+  <link rel="stylesheet" href="CSS/main.css">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head>
+<body>
+  <header class="main-header">
+    <div class="logo" id="logoLink">🌞JaeWonFlight</div>
+    <nav class="main-nav">
+      <ul id="authLinks">
+        <!-- 로그인 상태에 따라 여기에 버튼이 추가됩니다 -->
+      </ul>
+    </nav>
+  </header>
+
+<div class="content-container">
+  <!-- Image container -->
+  <div class="image-container">
+    <!-- Image will be placed here via CSS -->
+  </div>
+
+  <!-- Search panel container -->
+  <div class="search-panel-container">
+    <!-- Existing search panel HTML here -->
+    <div class="search-panel">
+      <div class="tab-group">
+        <button class="tab" id="flightsTab">항공편</button>
+      </div>
+    
+      <div class="search-fields">
+        <div class="field-group">
+          <label for="departure">출발지</label>
+          <button class="dropdown-toggle" id="departureToggle">서울 (모두)</button>
+          <div id="departureDropdown" class="dropdown-content">
+            <ul>
+              <li><a href="javascript:void(0);" data-value="한국 인천국제공항 (ICN)">한국 인천국제공항 (ICN)</a></li>
+              <li><a href="javascript:void(0);" data-value="한국 김포 (GMP)">한국 김포 (GMP)</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+        
+      <div class="search-fields">
+        <div class="field-group">
+          <label for="destination">도착지</label>
+          <button class="dropdown-toggle" id="destinationToggle">국가, 도시 또는 공항</button>
+          <div id="destinationDropdown" class="dropdown-content">
+            <ul>
+              <li><a href="javascript:void(0);" data-value="일본 도쿄 (NRT)">일본 도쿄 (NRT)</a></li>
+              <li><a href="javascript:void(0);" data-value="일본 하네다 (HND)">일본 도쿄 (HND)</a></li>
+              <li><a href="javascript:void(0);" data-value="일본 오사카">일본 오사카</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    
+    
+        <div class="field-group">
+          <label for="departureDate">가는 날</label>
+          <input type="date" id="departureDate" placeholder="날짜 입력">
+        </div>
+    
+        <div class="field-group">
+          <label for="returnDate">오는 날</label>
+          <input type="date" id="returnDate" placeholder="날짜 입력">
+        </div>
+    
+        <div class="field-group">
+          <label for="passengers">여행자 및 좌석</label>
+          <button id="passengers-button" class="dropdown-button">1 성인, 일반석</button>
+          <div id="passenger-selector" class="passenger-dropdown">
+            <div class="passenger-count">
+              <span>성인</span>
+              <div class="counter-container">
+                <button class="passenger-minus" data-type="adults">-</button>
+                <span id="adult-count">1</span>
+                <button class="passenger-plus" data-type="adults">+</button>
+              </div>
+            </div>
+            
+            <button id="apply-passengers" class="apply-button">적용</button>
+          </div>
+        </div>
+    
+      <button class="search-button" id="searchFlights">검색하기</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// 로고 클릭 시 메인 페이지로 이동
+document.getElementById('logoLink').addEventListener('click', function() {
+  window.location.href = "main.html";
+});
+
+// 메뉴 버튼 클릭 시 동작
+//document.getElementById('menuButton').onclick = function() {
+//  document.getElementById('mainNavigation').classList.toggle('show');
+//};
+
+// 로그인 버튼
+document.addEventListener('DOMContentLoaded', function() {
+  checkLoginStatus();
+});
+
+function checkLoginStatus() {
+  const authLinks = document.getElementById('authLinks');
+  if (localStorage.getItem('authToken')) {
+    // 로그아웃 버튼을 안전하게 동적으로 추가하기 위해, 
+    // createElement와 appendChild를 사용할 것을 권장합니다.
+    var logoutLi = document.createElement('li');
+    var logoutLink = document.createElement('a');
+    logoutLink.href = "#";
+    logoutLink.id = "logoutButton";
+    logoutLink.textContent = "로그아웃";
+    logoutLink.addEventListener('click', function() {
+      localStorage.removeItem('authToken');
+      window.location.reload();
+    });
+    logoutLi.appendChild(logoutLink);
+    authLinks.appendChild(logoutLi);
+
+ // 나의 예약 정보 버튼 추가
+    var reservationLi = document.createElement('li');
+    var reservationLink = document.createElement('a');
+    reservationLink.href = "reservation_info.html"; // 예약 정보 페이지로 가는 경로 설정
+    reservationLink.id = "reservationInfo";
+    reservationLink.textContent = "나의 예약 정보";
+    reservationLi.appendChild(reservationLink);
+    authLinks.appendChild(reservationLi);
+
+  } else {
+    authLinks.innerHTML = '<li><a id="loginButton" href="#">로그인</a></li><li><a href="signup.html">회원가입</a></li>';
+
+        // 로그인 페이지로 이동하는 버튼에 이벤트 리스너를 추가합니다.
+document.getElementById('loginButton').addEventListener('click', function() {
+  // 현재 페이지의 URL을 sessionStorage에 'returnUrl'이라는 키로 저장합니다.
+  sessionStorage.setItem('returnUrl', window.location.href);
+  window.location.href = 'login.html'; // 로그인 페이지로 이동합니다.
+});
+  }
+}
+
+// 드롭다운 토글 함수
+function toggleDropdown(dropdownId) {
+  var dropdown = document.getElementById(dropdownId);
+  // 다른 모든 드롭다운을 닫고 현재 드롭다운의 상태를 토글합니다.
+  document.querySelectorAll('.dropdown-content').forEach(function(otherDropdown) {
+    if (otherDropdown.id !== dropdownId) {
+      otherDropdown.classList.remove('show');
+    }
+  });
+  dropdown.classList.toggle('show');
+}
+
+// 드롭다운에서 항목 선택 시 처리 함수
+function handleDropdownSelection(dropdownToggleId, dropdownId, value) {
+  document.getElementById(dropdownToggleId).textContent = value;
+  toggleDropdown(dropdownId); // 드롭다운 ID를 바로 사용합니다.
+}
+
+// 출발지와 도착지 드롭다운 토글 이벤트
+document.getElementById('departureToggle').addEventListener('click', function() {
+  toggleDropdown('departureDropdown');
+});
+document.getElementById('destinationToggle').addEventListener('click', function() {
+  toggleDropdown('destinationDropdown');
+});
+
+// 출발지와 도착지 드롭다운에서 항목 선택 시 처리 이벤트
+document.querySelectorAll('.dropdown-content a').forEach(function(link) {
+  link.addEventListener('click', function() {
+    const dropdownContent = this.closest('.dropdown-content');
+    const dropdownId = dropdownContent.id;
+    const dropdownToggleId = dropdownId.replace('Dropdown', 'Toggle');
+    handleDropdownSelection(dropdownToggleId, dropdownId, this.getAttribute('data-value'));
+    dropdownContent.classList.remove('show'); // 드롭다운을 닫습니다.
+  });
+});
+
+  // 승객 수 선택
+  document.getElementById('passengers-button').addEventListener('click', function() {
+    document.getElementById('passenger-selector').style.display = 'block';
+  });
+
+  // 승객 수 조절 로직
+  let adultCount = 1;
+  let childrenCount = 0;
+
+  function updatePassengerCount() {
+    document.getElementById('adult-count').textContent = adultCount;
+    document.getElementById('children-count').textContent = childrenCount;
+  }
+
+  document.querySelectorAll('.passenger-plus').forEach(function(button) {
+    button.addEventListener('click', function() {
+      if (this.getAttribute('data-type') === 'adults') {
+        adultCount++;
+      } else {
+        childrenCount++;
+      }
+      updatePassengerCount();
+    });
+  });
+
+  document.querySelectorAll('.passenger-minus').forEach(function(button) {
+    button.addEventListener('click', function() {
+      if (this.getAttribute('data-type') === 'adults' && adultCount > 1) {
+        adultCount--;
+      } 
+      updatePassengerCount();
+    });
+  });
+
+  document.getElementById('apply-passengers').addEventListener('click', function() {
+    document.getElementById('passengers-button').textContent = adultCount + ' 성인' ;
+    document.getElementById('passenger-selector').style.display = 'none';
+  });
+
+  // 검색 버튼 클릭 이벤트
+  document.getElementById('searchFlights').addEventListener('click', function() {
+    searchFlights();
+  });
+
+  // 검색 데이터를 Lambda 함수로 보내고 결과 처리
+  function searchFlights() {
+    const departure = document.getElementById('departureToggle').textContent;
+    const destination = document.getElementById('destinationToggle').textContent;
+    const departureDate = document.getElementById('departureDate').value;
+    const returnDate = document.getElementById('returnDate').value;
+    const adults = parseInt(document.getElementById('adult-count').textContent, 10); // 인원 수를 숫자로 변환
+
+    // API Gateway 엔드포인트 URL 생성
+    const apiEndpoint = 'https://iyy1tuzep4.execute-api.ap-northeast-2.amazonaws.com/project-api-gateway-1/flightlist';
+    const queryString = `?departure=${encodeURIComponent(departure)}&destination=${encodeURIComponent(destination)}&departureDate=${departureDate}&returnDate=${returnDate}&adults=${adults}`;
+    // API Gateway에 GET 요청 전송
+    fetch(apiEndpoint + queryString)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      sessionStorage.setItem('searchResults', JSON.stringify(data));
+      window.location.href = 'flight_list.html'; // 페이지 리디렉션
+    })
+    .catch(error => {
+      console.error('API 호출 중 오류 발생:', error);
+    });
+  }
+</script>
+
+</body>
+</html>

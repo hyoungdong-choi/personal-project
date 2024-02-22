@@ -1,0 +1,122 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Base styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+}
+
+/* Header styles */
+.list-header {
+  background-color: #003580;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  justify-content: center; /* 중앙 정렬을 유지하고 양 끝 요소들을 조정합니다 */
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.3rem;
+  flex: 1; /* 공간을 균등하게 분배합니다 */
+}
+
+.list-header h2 {
+  flex: 2; /* 공간을 균등하게 분배합니다 */
+  text-align: center; /* 제목을 중앙 정렬합니다 */
+}
+
+.main-nav {
+  flex: 1; /* 공간을 균등하게 분배합니다 */
+  display: flex;
+  justify-content: flex-end; /* 네비게이션 링크를 오른쪽 끝으로 정렬합니다 */
+}
+.main-nav ul {
+  display: flex;
+  gap: 1rem;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.main-nav a {
+  color: white;
+  text-decoration: none;
+}
+
+.main-nav a:hover {
+  background-color: #0051cc;
+}
+
+/* Flight list styles */
+.flight-list {
+  display: flex; /* Flexbox를 사용하여 자식 요소들을 flex 아이템으로 만듭니다 */
+  flex-direction: column; /* 아이템을 수직으로 정렬합니다 */
+  align-items: center; /* 가운데 정렬을 위해 align-items를 사용합니다 */
+  justify-content: center; /* 수직 방향으로 가운데 정렬을 위해 justify-content를 사용합니다 */
+  width: 100%; /* 최대 너비를 부모 요소의 너비로 설정합니다 */
+  padding: 20px 0; /* 상하 패딩을 추가합니다 */
+}
+
+.flight {
+  background: #fff;
+  border: 1px solid #ddd;
+  margin: 20px auto; /* 상하 마진은 20px, 좌우 마진은 auto로 설정하여 가운데 정렬합니다 */
+  padding: 20px;
+  width: 50%; /* 너비를 50%로 설정하여 컨테이너의 절반 크기를 차지하게 합니다 */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative; /* 하위 요소를 절대 위치로 정렬하기 위해 relative 설정 */
+}
+
+.flight .reserve-button {
+  position: absolute; /* 상대 위치 설정 */
+  bottom: 10px; /* 하단 여백 */
+  right: 10px; /* 우측 여백 */
+  background-color: #0066ff; /* 배경색 */
+  color: white; /* 글자색 */
+  padding: 0.625rem 1rem; /* 내부 여백 조정 */
+  border-radius: 0.25rem; /* 둥근 모서리 */
+  cursor: pointer; /* 클릭 가능한 커서 스타일 */
+  border: none; /* 테두리 없음 */
+  outline: none; /* 포커스 효과 제거 */
+}
+
+.flight .reserve-button:hover {
+  background-color: #0051cc; /* 호버 상태 배경색 */
+}
+
+.flight img {
+  width: 100%;
+  height: auto;
+}
+
+.flight h3 {
+  color: #333;
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+.flight p {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.flight .price {
+  color: #e44d26;
+  font-weight: bold;
+}
+
+.flight .btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #0056b3;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  text-align: center;
+}
