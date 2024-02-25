@@ -13,6 +13,7 @@ AWS를 메인 서비스로 활용하면서 오픈스택은 주로 데이터베�
 ＊ VMware
 ＊ OpenStack
 
+
 AWS 환경
 핵심 서비스
 ＊ Amazon Route 53: 도메인 이름 시스템(DNS) 서비스
